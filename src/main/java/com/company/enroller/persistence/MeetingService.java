@@ -11,6 +11,8 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.company.enroller.model.Meeting;
@@ -19,6 +21,9 @@ import com.company.enroller.model.Meeting;
 public class MeetingService {
 
 	DatabaseConnector connector;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 	public MeetingService() {
 		connector = DatabaseConnector.getInstance();

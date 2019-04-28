@@ -12,6 +12,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
        http.csrf().disable()
                .authorizeRequests()
                .anyRequest().permitAll()
+               // .anyRequest().permitAll() - zachowuje wszystko po staremu, permit all itp - trza bylo dodac po zmianie dependency bo nie puszczalo nikogo
                .and()
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
    }
