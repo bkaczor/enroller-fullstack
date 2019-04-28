@@ -11,7 +11,11 @@
       <meetings-page :username="authenticatedUsername"></meetings-page>
     </div>
     <div v-else>
-      <login-form @login="login($event)"></login-form>
+      <button @click="registering = false">Loguję się</button>
+      <button @click="registering = true">Rejestruję się</button>
+      <login-form @login="login($event)" v-if="!registering"></login-form>
+      <login-form @login="register($event)" button-label="Zarejestruj się" v-else></login-form>
+
     </div>
   </div>
 </template>
@@ -19,13 +23,15 @@
 <script>
     import "milligram";
     import LoginForm from "./LoginForm";
+    import RegisterForm from "./RegisterForm";
     import MeetingsPage from "./meetings/MeetingsPage";
 
     export default {
-        components: {LoginForm, MeetingsPage},
+        components: {LoginForm, MeetingsPage, RegisterForm},
         data() {
             return {
-                authenticatedUsername: ""
+                authenticatedUsername: "",
+                registering: false
             };
         },
         methods: {
@@ -34,6 +40,17 @@
             },
             logout() {
                 this.authenticatedUsername = '';
+            },
+            register(user) {
+              // wysyla request POST na backend (dzięki vue-resource)
+              this.$http.post('participants', user)
+              // to pierwsze wywołanie asynchroniczne jakie robim.
+                      .then(response => {
+                        // udało się
+                      })
+                      .catch(response => {
+                        // nie udało sie
+                      });
             }
         }
     };
