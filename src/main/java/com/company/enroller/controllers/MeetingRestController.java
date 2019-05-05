@@ -29,7 +29,7 @@ public class MeetingRestController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getMetting(@PathVariable("id") long id) {
+    public ResponseEntity<?> getMeeting(@PathVariable("id") long id) {
         Meeting meeting = meetingService.getMeetingById(id);
         if (meeting == null) {
             return new ResponseEntity<>("Meeting does not exist.",HttpStatus.NOT_FOUND);
