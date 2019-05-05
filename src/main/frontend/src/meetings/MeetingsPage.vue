@@ -35,19 +35,38 @@
                 this.$http.post('meetings', meeting)
                     .then(reposnse => {
                         this.meetings.push(response.body);
-                    }, response => {
-                        //error callback
                     });
             },
             addMeetingParticipant(meeting) {
                 meeting.participants.push(this.username);
+                let url = 'meetings/' + meeting.id.toString() + '/participants?login=' + this.username;
+                this.$http.post(url) //meeting.id - undefined?
+                    .then(response => {
+                        meeting.participants.push(response.body)
+                    });
             },
             removeMeetingParticipant(meeting) {
-                meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
+                // meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
+                this.$http.delete('meetings/' + meeting.id.toString() + "/participants?login=", this.username) // //meeting.id - undefined?
+                    .then(response => {
+                        meeting.participants.splice(meeting.participants.indexOf(this.username), 1)
+                    });
             },
             deleteMeeting(meeting) {
                 this.meetings.splice(this.meetings.indexOf(meeting), 1);
+            },
+            getMeetings() {
+                this.$http.get('meetings')
+                    .then(response => {
+                        this.meetings = response.body;
+                    })
+                    .catch(response => {
+                        this.failure('Błąd przy wyświetlaniu listy. Kod odpowiedzi: ' + response.status)
+                    });
             }
+        },
+        mounted() {
+            this.getMeetings();
         }
     }
 </script>

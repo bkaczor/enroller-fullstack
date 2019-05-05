@@ -73,10 +73,11 @@ public class MeetingRestController {
     }
 
     @RequestMapping(value = "/{meetingId}/participants", method = RequestMethod.POST)
-    public ResponseEntity<?> addParticipantToMeeting(@PathVariable("meetingId") long meetingId,
-                                                     @RequestParam String participantId) {
-        Meeting meeting = meetingService.getMeetingById(meetingId);
-        Participant participant = participantService.findByLogin(participantId);
+    public ResponseEntity<?> addParticipantToMeeting(@PathVariable("meetingId") String meetingId,
+                                                     @RequestParam String login) {
+        long id = Long.parseLong(meetingId);
+        Meeting meeting = meetingService.getMeetingById(id);
+        Participant participant = participantService.findByLogin(login);
         if (meeting == null) {
             return new ResponseEntity<>("Meeting does not exist.", HttpStatus.NOT_FOUND);
         }
@@ -84,16 +85,16 @@ public class MeetingRestController {
             return new ResponseEntity<>("Participant with this login does not exist.", HttpStatus.NOT_FOUND);
         }
 
-        meetingService.addParticipantToMeeting(meetingId, participant);
+        meetingService.addParticipantToMeeting(id, participant);
 
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{meetingId}/participants", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeParticipantFromMeeting(@PathVariable("meetingId") long meetingId,
-                                                     @RequestParam String participantId) {
+                                                     @RequestParam String login) {
         Meeting meeting = meetingService.getMeetingById(meetingId);
-        Participant participant = participantService.findByLogin(participantId);
+        Participant participant = participantService.findByLogin(login);
         if (meeting == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
