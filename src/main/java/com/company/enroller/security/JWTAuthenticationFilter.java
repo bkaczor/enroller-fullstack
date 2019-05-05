@@ -24,41 +24,41 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-   private AuthenticationManager authenticationManager;
-   private final String secret;
-   private final String issuer;
-   private final int tokenExpiration;
+    private AuthenticationManager authenticationManager;
+    private final String secret;
+    private final String issuer;
+    private final int tokenExpiration;
 
-   public JWTAuthenticationFilter(AuthenticationManager authenticationManager, String secret, String issuer, int tokenExpiration) {
-       super(new AntPathRequestMatcher("/api/tokens", HttpMethod.POST.name()));
-       this.authenticationManager = authenticationManager;
-       this.secret = secret;
-       this.issuer = issuer;
-       this.tokenExpiration = tokenExpiration;
-   }
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, String secret, String issuer, int tokenExpiration) {
+        super(new AntPathRequestMatcher("/api/tokens", HttpMethod.POST.name()));
+        this.authenticationManager = authenticationManager;
+        this.secret = secret;
+        this.issuer = issuer;
+        this.tokenExpiration = tokenExpiration;
+    }
 
-   @Override
-   public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
-       try {
-           Participant participant = new ObjectMapper().readValue(req.getInputStream(), Participant.class);
-           Authentication authentication = new UsernamePasswordAuthenticationToken(participant.getLogin(), participant.getPassword(), new ArrayList<>());
-           return authenticationManager.authenticate(authentication);
-       } catch (IOException e) {
-           throw new BadCredentialsException("Invalid login request.", e);
-       }
-   }
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+        try {
+            Participant participant = new ObjectMapper().readValue(req.getInputStream(), Participant.class);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(participant.getLogin(), participant.getPassword(), new ArrayList<>());
+            return authenticationManager.authenticate(authentication);
+        } catch (IOException e) {
+            throw new BadCredentialsException("Invalid login request.", e);
+        }
+    }
 
-   @Override
-   protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
-       String login = ((UserDetails) auth.getPrincipal()).getUsername();
-       LocalDateTime now = LocalDateTime.now();
-       String token = JWT.create()
-               .withIssuer(issuer)
-               .withSubject(login)
-               .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
-               .withExpiresAt(Date.from(now.plusSeconds(tokenExpiration).atZone(ZoneId.systemDefault()).toInstant()))
-               .withClaim("role", "participant")
-               .sign(Algorithm.HMAC256(secret));
-       res.getWriter().write(String.format("{\"token\": \"%s\"}", token));
-   }
+    @Override
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
+        String login = ((UserDetails) auth.getPrincipal()).getUsername();
+        LocalDateTime now = LocalDateTime.now();
+        String token = JWT.create()
+                .withIssuer(issuer)
+                .withSubject(login)
+                .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
+                .withExpiresAt(Date.from(now.plusSeconds(tokenExpiration).atZone(ZoneId.systemDefault()).toInstant()))
+                .withClaim("role", "participant")
+                .sign(Algorithm.HMAC256(secret));
+        res.getWriter().write(String.format("{\"token\": \"%s\"}", token));
+    }
 }

@@ -13,7 +13,6 @@ import java.util.Collections;
 
 @Service
 public class ParticipantProvider implements UserDetailsService {
-
     @Autowired
     private ParticipantService participantService;
 
@@ -24,5 +23,5 @@ public class ParticipantProvider implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         return new User(participant.getLogin(), participant.getPassword(), Collections.emptyList());
-   }
+    }
 }
