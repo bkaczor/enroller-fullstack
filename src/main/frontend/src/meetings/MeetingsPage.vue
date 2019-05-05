@@ -31,13 +31,17 @@
         },
         methods: {
             addNewMeeting(meeting) {
-                this.meetings.push(meeting);
+                this.$http.post('meetings', meeting)
+                    .then(response => {
+                        this.meetings.push(response.body)
+                    });
             },
             addMeetingParticipant(meeting) {
-                meeting.participants.push(this.username);
+                this.$http.post(`meetings/${meeting.id}/participants`, query.this.username)
+                    .then(response => meeting.participants.push(response.body));
             },
             removeMeetingParticipant(meeting) {
-                meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
+                this.$http.put(`meetings/${meeting.id}/participants/`);
             },
             deleteMeeting(meeting) {
                 this.meetings.splice(this.meetings.indexOf(meeting), 1);
