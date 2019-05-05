@@ -89,9 +89,9 @@ public class MeetingRestController {
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{meetingId}/participants/{participantId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{meetingId}/participants", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeParticipantFromMeeting(@PathVariable("meetingId") long meetingId,
-                                                     @PathVariable("participantId") String participantId) {
+                                                     @RequestParam String participantId) {
         Meeting meeting = meetingService.getMeetingById(meetingId);
         Participant participant = participantService.findByLogin(participantId);
         if (meeting == null) {
