@@ -32,9 +32,9 @@ public class MeetingRestController {
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getMeeting(@PathVariable("id") long id) {
-	     Meeting meeting = meetingService.findById(id);
-	     if (id <= 0) {
+	public ResponseEntity<?> getMeeting(@PathVariable("id") String title) {
+	     Meeting meeting = meetingService.findByTitle(title);
+	     if (meeting == null) {
 	         return new ResponseEntity(HttpStatus.NOT_FOUND);
 	     }
 	     return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
@@ -42,24 +42,24 @@ public class MeetingRestController {
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	 public ResponseEntity<?> registerMeeting(@RequestBody Meeting meeting) {
-		Meeting foundMeeting = meetingService.findById(meeting.getId());
+		Meeting foundMeeting = meetingService.findByTitle(meeting.getTitle());
 		if (foundMeeting != null) {
 		
-			return new ResponseEntity("Unable to create. A meeting with id " + meeting.getId() + " already exist.", HttpStatus.CONFLICT);
+			return new ResponseEntity("Unable to create. A meeting with title " + meeting.getTitle() + " already exist.", HttpStatus.CONFLICT);
 			}
-		meetingService.add(meeting);
+		meetingService.addNewMeeting(meeting);
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.CREATED);
 		
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	 public ResponseEntity<?> deleteMeeting(@PathVariable("id")long id) {
-		Meeting meeting= meetingService.findById(id);
+	 public ResponseEntity<?> deleteMeeting(@PathVariable("id")String title) {
+		Meeting meeting= meetingService.findByTitle(title);
 		if (meeting == null) {
 		
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 			}
-		meetingService.delete(meeting);
+		meetingService.deleteMeeting(meeting);
 		return new ResponseEntity<Meeting>(HttpStatus.NO_CONTENT);
 		
 	}

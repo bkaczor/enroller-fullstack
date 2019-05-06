@@ -22,12 +22,12 @@ public class MeetingService {
         return query.list();
     }
     
-public Meeting findById(long id) {
+    public Meeting findByTitle(String title) {
 		
-		return (Meeting) connector.getSession().get(Meeting.class, id);
+		return (Meeting) connector.getSession().get(Meeting.class, title);
 	}
 
-public Meeting add(Meeting meeting) {
+    public Meeting addNewMeeting(Meeting meeting) {
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().save(meeting);
 		transaction.commit();
@@ -35,10 +35,10 @@ public Meeting add(Meeting meeting) {
 		
 	}
 
-public void delete(Meeting meeting) {
-	Transaction transaction = connector.getSession().beginTransaction();
-	connector.getSession().delete(meeting);
-	transaction.commit();
+    public void deleteMeeting(Meeting meeting) {
+    	Transaction transaction = connector.getSession().beginTransaction();
+    	connector.getSession().delete(meeting);
+    	transaction.commit();
 	
 	}
 
