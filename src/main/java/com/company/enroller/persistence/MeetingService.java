@@ -22,12 +22,24 @@ public class MeetingService {
         return query.list();
     }
     
-    public Meeting findByTitle(String title) {
+//    public Meeting findByTitle(String title) {
+//		
+//		return (Meeting) connector.getSession().get(Meeting.class, title);
+//	}
+//
+//    public Meeting addNewMeeting(Meeting meeting) {
+//		Transaction transaction = connector.getSession().beginTransaction();
+//		connector.getSession().save(meeting);
+//		transaction.commit();
+//		return meeting;
+//		
+//	}
+    public Meeting findById(long id) {
 		
-		return (Meeting) connector.getSession().get(Meeting.class, title);
+		return (Meeting) connector.getSession().get(Meeting.class, id);
 	}
 
-    public Meeting addNewMeeting(Meeting meeting) {
+    public Meeting add(Meeting meeting) {
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().save(meeting);
 		transaction.commit();

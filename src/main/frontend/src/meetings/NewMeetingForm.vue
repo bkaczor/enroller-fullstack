@@ -3,13 +3,11 @@
     <form @submit.prevent="addNewMeeting()" v-if="adding">
       <h3>Dodaj nowe spotkanie</h3>
       <label>Nazwa</label>
-      <input type="text" v-model="newMeeting.title">
+      <input type="text" v-model="newMeeting.name">
       <label>Opis</label>
       <textarea v-model="newMeeting.description"></textarea>
-      <label>Data</label>
-      <input type="date" v-model="newMeeting.date">
       <button>Dodaj</button>
-      <span class="error" v-if="error">Spotkanie musi mieć nazwę i date!</span>
+      <span class="error" v-if="error">Spotkanie musi mieć nazwę!</span>
     </form>
     <button @click="adding = true" v-else>Dodaj nowe spotkanie</button>
   </div>
@@ -27,7 +25,7 @@
         methods: {
             addNewMeeting() {
                 this.error = false;
-                if (this.newMeeting.title || this.newMeeting.date) {
+                if (this.newMeeting.name) {
                     this.$emit('added', this.newMeeting);
                     this.newMeeting = {participants: []};
                     this.adding = false;
@@ -38,6 +36,12 @@
         }
     }
 </script>
+
+<style scoped>
+  .error {
+    color: #F00;
+  }
+</style>
 
 <style scoped>
   .error {

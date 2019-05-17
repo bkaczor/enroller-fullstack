@@ -10,7 +10,8 @@
     </thead>
     <tbody>
     <tr v-for="meeting in meetings" :key="meeting.name">
-      <td>{{ meeting.name }}</td>
+      <td>{{ meeting.id }}</td>
+      <td>{{ meeting.title }}</td>
       <td>{{ meeting.description }}</td>
       <td>
         <ul v-if="meeting.participants">
