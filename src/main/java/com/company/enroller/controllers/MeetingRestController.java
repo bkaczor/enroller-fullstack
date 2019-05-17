@@ -45,9 +45,9 @@ public class MeetingRestController {
 		Meeting foundMeeting = meetingService.findById(meeting.getId());
 		if (foundMeeting != null) {
 		
-			return new ResponseEntity("Unable to create. A meeting with ID " + meeting.getId() + " already exist.", HttpStatus.CONFLICT);
+			return new ResponseEntity("Unable to create. A meeting with this ID " + meeting.getId() + " already exist.", HttpStatus.CONFLICT);
 			}
-		meetingService.add(meeting);
+		meetingService.addNewMeeting(meeting);
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.CREATED);
 		
 	}

@@ -39,7 +39,7 @@ public class MeetingService {
 		return (Meeting) connector.getSession().get(Meeting.class, id);
 	}
 
-    public Meeting add(Meeting meeting) {
+    public Meeting addNewMeeting(Meeting meeting) {
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().save(meeting);
 		transaction.commit();
